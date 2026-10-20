@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<title>Escala 5x2 das Bases</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: painel operacional de leitura vertical — cada seção responde uma pergunta da equipe (quando, quem, quantos, sobreaviso, o que falta) */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --line:#d7dde4; --fg:#16212c; --muted:#5a6876;
+  --work:#1f7a6d; --work-soft:#d6ece8;
+  --off:#e6e1d6; --off-fg:#6b5d3f;
+  --standby:#c77a12; --standby-soft:#f8e7c9;
+  --lunch:#b8c2cc;
+  --ok:#2e7d4f; --warn:#b26b00; --bad:#b3362c;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10161c; --surface:#18212a; --line:#2b3743; --fg:#e7edf2; --muted:#9aa8b5;
+  --work:#3fb3a1; --work-soft:#1d3b37; --off:#2e2b25; --off-fg:#cdbb93;
+  --standby:#f0a640; --standby-soft:#3e2f17; --lunch:#4a5866;
+  --ok:#5cc489; --warn:#f0a640; --bad:#ec6d62; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#10161c; --surface:#18212a; --line:#2b3743; --fg:#e7edf2; --muted:#9aa8b5;
+  --work:#3fb3a1; --work-soft:#1d3b37; --off:#2e2b25; --off-fg:#cdbb93;
+  --standby:#f0a640; --standby-soft:#3e2f17; --lunch:#4a5866;
+  --ok:#5cc489; --warn:#f0a640; --bad:#ec6d62; color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 56px;display:grid;gap:40px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(28px,5vw,42px);font-weight:800}
+h2{font-size:24px;font-weight:700}
+h3{font-size:17px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+section{display:grid;gap:16px}
+.lead{color:var(--muted);font-size:17px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:grid;gap:2px}
+.fact b{font-family:var(--f-display);font-size:22px}
+.fact span{color:var(--muted);font-size:14px}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* timeline */
+.tl{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;gap:10px;overflow-x:auto}
+.tl-row{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;min-width:620px}
+.tl-label{font-weight:700;font-size:14px}
+.bar{position:relative;height:30px;background:var(--bg);border-radius:4px}
+.seg{position:absolute;top:0;bottom:0;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:var(--f-mono);color:#fff;white-space:nowrap;overflow:hidden}
+.seg.w{background:var(--work)} .seg.l{background:var(--lunch);color:var(--fg)} .seg.c{background:var(--work-soft);color:var(--fg);border:1px dashed var(--work)}
+.axis{position:relative;height:18px;min-width:620px;margin-left:122px}
+.axis span{position:absolute;transform:translateX(-50%);font-size:11px;color:var(--muted);font-family:var(--f-mono)}
+/* week grid */
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+.cell{border-radius:5px;padding:6px 4px;text-align:center;font-size:13px;font-weight:600;min-width:62px;display:grid;gap:3px}
+.cell.t{background:var(--work-soft);color:var(--fg)}
+.cell.f{background:var(--off);color:var(--off-fg)}
+.cell .sb{background:var(--standby);color:#fff;border-radius:3px;font-size:11px;padding:1px 4px;font-weight:700}
+.grid td{padding:6px;text-align:center}
+.grid td:first-child{text-align:left;font-weight:600;white-space:nowrap;padding-left:12px}
+.grid th{text-align:center} .grid th:first-child{text-align:left}
+.bases{display:grid;gap:24px}
+.base-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline}
+.base-head span{color:var(--muted);font-size:14px}
+/* coverage chart */
+.cov{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;gap:10px}
+.cols{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:150px;border-bottom:1px solid var(--line)}
+.col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:4px}
+.col b{font-family:var(--f-mono);font-size:13px}
+.col div{width:100%;max-width:34px;background:var(--work);border-radius:3px 3px 0 0}
+.col.low div{background:var(--standby)}
+.col.zero div{background:transparent}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:12px;color:var(--muted);font-weight:700}
+/* rotation */
+.rot{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.week{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:8px}
+.week h3{font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:13px;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--work-soft);color:var(--fg)}
+.chip.sb{background:var(--standby-soft)}
+.row-l{font-size:13px;color:var(--muted)}
+.status{font-weight:700;white-space:nowrap}
+.status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.bad{color:var(--bad)}
+.note{background:var(--standby-soft);border-radius:8px;padding:14px 16px;font-size:15px}
+footer{color:var(--muted);font-size:14px}
+</style>
+
+<div class="wrap">
+
+<header style="display:grid;gap:12px">
+  <div class="eyebrow">Equipes de campo · Barbacena, São João del-Rei e Santos Dumont</div>
+  <h1>Escala 5x2 com 42 horas semanais</h1>
+  <p class="lead">Como fica a semana das equipes a partir da nova regra: todo mundo trabalha 5 dias, folga 2, e a folga cai sempre no domingo. Quem trabalha no sábado ganha a segunda folga no meio da semana e fica de sobreaviso.</p>
+  <div class="facts">
+    <div class="fact"><b class="mono">16/12/2026</b><span>Começa a valer a 5x2 com no máximo 42h</span></div>
+    <div class="fact"><b class="mono">8h24</b><span>Por dia, 5 dias por semana</span></div>
+    <div class="fact"><b class="mono">1h30</b><span>De almoço, desencontrado entre os turnos</span></div>
+    <div class="fact"><b class="mono">16/12/2027</b><span>A jornada cai para 40h (8h por dia)</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="eyebrow">1 · Horário do dia</div>
+  <h2>Dois turnos para cobrir das 07h às 18h</h2>
+  <p>Metade das duplas de cada base entra às 07h e a outra metade às 08h. Como o almoço não é no mesmo horário, sempre tem equipe na rua.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Turno</th><th>Quem</th><th>Entrada</th><th>Almoço</th><th>Saída</th><th>Horas/dia</th></tr></thead>
+    <tbody>
+      <tr><td><b>Turno 07h</b></td><td>Metade das duplas</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
+      <tr><td><b>Turno 08h</b></td><td>Outra metade</td><td class="num">08:00</td><td class="num">12:00–13:30</td><td class="num">17:54</td><td class="num">8h24</td></tr>
+      <tr><td><b>Sábado</b></td><td>Duplas de sábado</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
+      <tr><td><b>Gerentes</b></td><td>Seg a sex</td><td class="num">08:00</td><td class="num">12:00–13:30</td><td class="num">17:54</td><td class="num">8h24</td></tr>
+      <tr><td><b>Coordenadores e assistentes</b></td><td>Conforme escala</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tl" id="timeline" aria-label="Linha do tempo dos turnos"></div>
+</section>
+
+<section>
+  <div class="eyebrow">2 · A semana de cada base</div>
+  <h2>Quem trabalha, quem folga e quem fica de sobreaviso</h2>
+  <p>Exemplo de uma semana. As duas duplas de sábado (uma em Santos Dumont) ficam de sobreaviso de segunda a domingo. No dia da folga de uma, a outra dupla de sábado da mesma base assume o sobreaviso.</p>
+  <div class="legend">
+    <span><i style="background:var(--work-soft)"></i>Trabalha</span>
+    <span><i style="background:var(--off)"></i>Folga</span>
+    <span><i style="background:var(--standby)"></i>Sobreaviso (fora do expediente)</span>
+  </div>
+  <div class="bases" id="bases"></div>
+</section>
+
+<section>
+  <div class="eyebrow">3 · Força de trabalho por dia</div>
+  <h2>Segunda e sexta com todas as duplas</h2>
+  <p>As folgas do meio da semana tiram no máximo uma dupla por base no mesmo dia. As barras em laranja mostram os dias com menos equipes, que os backups reforçam.</p>
+  <div class="cov" id="coverage"></div>
+</section>
+
+<section>
+  <div class="eyebrow">4 · Rodízio no mês</div>
+  <h2>Cada dupla trabalha um sábado sim, outro não</h2>
+  <p>Em Barbacena e São João, as duplas A e B pegam o sábado numa semana, e C e D na seguinte. Em Santos Dumont, as duas duplas alternam. Quem está no sábado é quem fica de sobreaviso naquela semana.</p>
+  <div class="rot" id="rotation"></div>
+</section>
+
+<section>
+  <div class="eyebrow">5 · Gestão</div>
+  <h2>Gerentes, coordenadores e assistentes</h2>
+  <div class="scroll"><table class="grid" id="mgmt"></table></div>
+  <p>O coordenador de São João acompanha Barbacena na quarta (folga do coordenador de Barbacena) e nos sábados em que o assistente de Barbacena está de plantão. O acompanhamento é remoto, pelo sistema e telefone. Gerentes e coordenadores fazem o sobreaviso de gestão em fins de semana alternados, de preferência no mesmo fim de semana em que trabalham no sábado.</p>
+</section>
+
+<section>
+  <div class="eyebrow">6 · Sobreaviso</div>
+  <h2>Quanto pagar em cada situação</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Situação</th><th>O que pagar</th></tr></thead>
+    <tbody>
+      <tr><td>Ficou de sobreaviso e não foi chamado</td><td>1/3 do valor da hora pelo tempo de sobreaviso (até 24h por escala)</td></tr>
+      <tr><td>Chamado à noite, em dia de trabalho</td><td>Horas trabalhadas como hora extra (50% ou o que a convenção definir)</td></tr>
+      <tr><td>Chamado na folga e ganha outra folga na mesma semana</td><td>Hora normal, se não passar de 42h na semana</td></tr>
+      <tr><td>Chamado na folga, sem outra folga</td><td><b>Horas em dobro (100%)</b></td></tr>
+      <tr><td>Depois de qualquer chamado</td><td>11h de descanso antes da próxima jornada</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Como as duplas de sábado ficam de sobreaviso também no domingo, que é dia de folga, todo chamado de domingo é pago em dobro ou compensado com outra folga. Se os chamados de domingo virarem rotina, a folga deixa de existir na prática; nesse caso, vale rever a escala.</p>
+</section>
+
+<section>
+  <div class="eyebrow">7 · Pontos em aberto</div>
+  <h2>O que foi cumprido e o que não deu</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Regra</th><th>Situação</th><th>Por quê</th></tr></thead>
+    <tbody>
+      <tr><td>Folga no domingo para todos</td><td class="status ok">Cumprida</td><td>Ninguém trabalha no domingo; só o sobreaviso.</td></tr>
+      <tr><td>Segunda folga entre terça e quinta</td><td class="status ok">Cumprida</td><td>Só para quem trabalha no sábado. Os demais folgam sábado e domingo.</td></tr>
+      <tr><td>2 duplas no sábado em Barbacena e São João</td><td class="status ok">Cumprida</td><td>Rodízio A+B e C+D, sábado a cada 2 semanas.</td></tr>
+      <tr><td>Sobreaviso com a equipe de sábado, de segunda a domingo</td><td class="status ok">Cumprida</td><td>No dia de folga de uma dupla, a outra dupla de sábado da mesma base cobre.</td></tr>
+      <tr><td>Folgas do meio da semana sem coincidir entre bases</td><td class="status warn">Parcial</td><td>São 5 duplas de sábado para 3 dias. Terça coincide Barbacena e São João, e quarta coincide São João e Santos Dumont. Nunca há 2 duplas da mesma base de folga juntas.</td></tr>
+      <tr><td>Coordenadores alternando o sábado</td><td class="status warn">Parcial</td><td>Barbacena tem só 1 coordenador, então ele alterna com o assistente.</td></tr>
+      <tr><td>Santos Dumont na escala de sábado</td><td class="status warn">Atenção</td><td>Com 2 duplas, cada uma pega sábado a cada 2 semanas e, na quarta, a base fica com 1 dupla.</td></tr>
+      <tr><td>2 duplas trabalhando no domingo</td><td class="status bad">Não cumprida</td><td>Conflita com a folga no domingo para todos. Domingo fica só com sobreaviso.</td></tr>
+      <tr><td>Colocar as 2h semanais no banco de horas</td><td class="status bad">Não recomendada</td><td>Banco de horas é para hora trabalhada a mais, não para hora que a empresa deixou de usar. A saída é trabalhar 8h24 por dia (precisa de acordo com o sindicato) ou 8h por dia (40h).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<footer>Proposta para discussão interna. Antes de implantar, validar com o contador ou advogado trabalhista, principalmente o acordo coletivo para as 8h24 e os percentuais de hora extra e sobreaviso da convenção. Base legal: Emenda Constitucional 141/2026.</footer>
+</div>
+
+<script>
+(function(){
+  // ---- timeline ----
+  var start=6.5,end=18.5,span=end-start;
+  function pct(h){return ((h-start)/span*100).toFixed(2)+'%'}
+  function seg(cls,a,b,txt){return '<div class="seg '+cls+'" style="left:'+pct(a)+';width:calc('+((b-a)/span*100).toFixed(2)+'% - 2px)">'+(txt||'')+'</div>'}
+  var rows=[
+    ['Turno 07h',[['w',7,11.5,'07:00–11:30'],['l',11.5,13,'almoço'],['w',13,16.9,'13:00–16:54']]],
+    ['Turno 08h',[['w',8,12,'08:00–12:00'],['l',12,13.5,'almoço'],['w',13.5,17.9,'13:30–17:54']]],
+    ['Cobertura',[['c',7,17.9,'sempre tem equipe na rua · 07:00 às 17:54']]]
+  ];
+  var html='';
+  rows.forEach(function(r){html+='<div class="tl-row"><div class="tl-label">'+r[0]+'</div><div class="bar">'+r[1].map(function(s){return seg(s[0],s[1],s[2],s[3])}).join('')+'</div></div>'});
+  var ax='<div class="axis">';for(var h=7;h<=18;h++){ax+='<span style="left:'+pct(h)+'">'+(h<10?'0':'')+h+'h</span>'}ax+='</div>';
+  document.getElementById('timeline').innerHTML=html+ax;
+
+  // ---- bases ----
+  var D=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+  // code: t=trabalha, f=folga; s suffix = sobreaviso
+  var bases=[
+    {name:'Barbacena',info:'4 duplas · 1 backup · gerente · coordenador',rows:[
+      ['Dupla de sábado 1 (folga terça)',['ts','f','ts','ts','ts','ts','fs']],
+      ['Dupla de sábado 2 (folga quinta)',['ts','ts','ts','f','ts','ts','fs']],
+      ['Outras 2 duplas',['t','t','t','t','t','f','f']],
+      ['Backup',['t','t','t','t','t','f','f']]
+    ]},
+    {name:'São João del-Rei',info:'4 duplas · 2 backups · gerente · 2 coordenadores',rows:[
+      ['Dupla de sábado 1 (folga quarta)',['ts','ts','f','ts','ts','ts','fs']],
+      ['Dupla de sábado 2 (folga terça)',['ts','f','ts','ts','ts','ts','fs']],
+      ['Outras 2 duplas',['t','t','t','t','t','f','f']],
+      ['Backups (2)',['t','t','t','t','t','f','f']]
+    ]},
+    {name:'Santos Dumont',info:'2 duplas',rows:[
+      ['Dupla de sábado (folga quarta)',['ts','ts','f','ts','ts','ts','fs']],
+      ['Outra dupla',['t','t','ts','t','t','f','f']]
+    ]}
+  ];
+  function cell(c){
+    var off=c[0]==='f',sb=c.indexOf('s')>0;
+    return '<div class="cell '+(off?'f':'t')+'">'+(off?'Folga':'Trabalha')+(sb?'<span class="sb">sobreaviso</span>':'')+'</div>';
+  }
+  var bh='';
+  bases.forEach(function(b){
+    bh+='<div style="display:grid;gap:10px"><div class="base-head"><h3>'+b.name+'</h3><span>'+b.info+'</span></div><div class="scroll"><table class="grid"><thead><tr><th>Equipe</th>'+D.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
+    b.rows.forEach(function(r){bh+='<tr><td>'+r[0]+'</td>'+r[1].map(function(c){return '<td>'+cell(c)+'</td>'}).join('')+'</tr>'});
+    bh+='</tbody></table></div></div>';
+  });
+  document.getElementById('bases').innerHTML=bh;
+
+  // ---- coverage ----
+  var cov=[['Barbacena',[4,3,4,3,4,2,0],4,'+1 backup de seg a sex'],['São João del-Rei',[4,3,3,4,4,2,0],4,'+2 backups de seg a sex'],['Santos Dumont',[2,2,1,2,2,1,0],2,'sem backup']];
+  var ch='';
+  cov.forEach(function(c){
+    var max=4;
+    ch+='<div class="chart"><div class="base-head"><h3>'+c[0]+'</h3><span>'+c[3]+'</span></div><div class="cols">'+
+      c[1].map(function(v,i){var cls=v===0?'zero':(v<c[2]&&i<5?'low':'');return '<div class="col '+cls+'"><b>'+v+'</b><div style="height:'+(v/max*120)+'px"></div></div>'}).join('')+
+      '</div><div class="days">'+D.map(function(d){return '<span>'+d+'</span>'}).join('')+'</div><div class="row-l">Duplas trabalhando no dia. Domingo: só sobreaviso.</div></div>';
+  });
+  document.getElementById('coverage').innerHTML=ch;
+
+  // ---- rotation ----
+  var weeks=[['Semana 1','A + B','A + B','Dupla 1'],['Semana 2','C + D','C + D','Dupla 2'],['Semana 3','A + B','A + B','Dupla 1'],['Semana 4','C + D','C + D','Dupla 2']];
+  var rh='';
+  weeks.forEach(function(w){
+    rh+='<div class="week"><h3>'+w[0]+'</h3>'+
+      '<div class="row-l">Barbacena</div><div class="chips"><span class="chip sb">Sábado + sobreaviso: '+w[1]+'</span></div>'+
+      '<div class="row-l">São João del-Rei</div><div class="chips"><span class="chip sb">Sábado + sobreaviso: '+w[2]+'</span></div>'+
+      '<div class="row-l">Santos Dumont</div><div class="chips"><span class="chip sb">Sábado + sobreaviso: '+w[3]+'</span></div></div>';
+  });
+  document.getElementById('rotation').innerHTML=rh;
+
+  // ---- management ----
+  var mg=[
+    ['Gerentes',['t','t','t','t','t','f','f']],
+    ['Coordenador São João · semana de sábado',['t','t','t','f','t','t','f']],
+    ['Coordenador São João · semana normal',['t','t','t','t','t','f','f']],
+    ['Coordenador ou assistente Barbacena · semana de sábado',['t','t','f','t','t','t','f']],
+    ['Coordenador ou assistente Barbacena · semana normal',['t','t','t','t','t','f','f']]
+  ];
+  var mh='<thead><tr><th>Função</th>'+D.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
+  mg.forEach(function(r){mh+='<tr><td>'+r[0]+'</td>'+r[1].map(function(c){return '<td>'+cell(c)+'</td>'}).join('')+'</tr>'});
+  document.getElementById('mgmt').innerHTML=mh+'</tbody>';
+})();
+</script>
+
+</body>
+</html>

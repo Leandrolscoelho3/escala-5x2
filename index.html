@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escala 5x2 das Bases</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{--bg:#f3f5f7;--surface:#fff;--line:#d7dde4;--fg:#16212c;--muted:#5a6876;--work:#1f7a6d;--standby:#c77a12}
+@media (prefers-color-scheme:dark){:root{--bg:#10161c;--surface:#18212a;--line:#2b3743;--fg:#e7edf2;--muted:#9aa8b5;--work:#3fb3a1;--standby:#f0a640;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Source Sans 3","Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:880px;margin:0 auto;padding:48px 16px;display:grid;gap:28px}
+h1,h2{font-family:Archivo,"Arial Narrow",Arial,sans-serif;margin:0;line-height:1.15;text-wrap:balance}
+h1{font-size:clamp(28px,5vw,40px)}
+p{margin:0;max-width:66ch;color:var(--muted)}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+a.card{display:grid;gap:8px;padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:10px;color:inherit;text-decoration:none}
+a.card:hover,a.card:focus-visible{border-color:var(--work);outline:none;box-shadow:0 0 0 1px var(--work)}
+a.card span{color:var(--work);font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.scroll{overflow-x:auto}
+footer{font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header style="display:grid;gap:10px">
+    <div class="eyebrow">Equipes de campo · Barbacena, São João del-Rei e Santos Dumont</div>
+    <h1>Escala 5x2 com 42 horas semanais</h1>
+    <p>Duas propostas de escala para a nova regra, que passa a valer em 16/12/2026. Folga sempre no domingo e, para quem trabalha no sábado, uma folga no meio da semana.</p>
+  </header>
+  <div class="cards">
+    <a class="card" href="modelo-1.html"><h2>Modelo 1</h2><p>2 duplas no sábado em Barbacena e São João. As duas ficam de sobreaviso e uma cobre a folga da outra.</p><span>Abrir Modelo 1 →</span></a>
+    <a class="card" href="modelo-2.html"><h2>Modelo 2</h2><p>3 duplas de segunda a sexta e 1 dupla no sábado por base, de sobreaviso de segunda a domingo. Com calendário interativo.</p><span>Abrir Modelo 2 →</span></a>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th>Turno</th><th>Entrada</th><th>Almoço</th><th>Saída</th><th>Horas/dia</th></tr></thead>
+    <tbody>
+      <tr><td>Turno 07h</td><td>07:00</td><td>11:30–13:00</td><td>16:54</td><td>8h24</td></tr>
+      <tr><td>Turno 08h</td><td>08:00</td><td>12:00–13:30</td><td>17:54</td><td>8h24</td></tr>
+      <tr><td>Sábado</td><td>07:00</td><td>11:30–13:00</td><td>16:54</td><td>8h24</td></tr>
+    </tbody>
+  </table></div>
+  <footer>Proposta para discussão interna. Base legal: Emenda Constitucional 141/2026.</footer>
+</div>
+</body>
+</html>
