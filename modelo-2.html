@@ -179,8 +179,6 @@ footer{color:var(--muted);font-size:14px}
       <tr><td><b>Turno 08h</b></td><td>Duplas B e D (Santos Dumont: B)</td><td class="num">08:00</td><td class="num">12:00–13:30</td><td class="num">17:54</td><td class="num">8h24</td></tr>
       <tr><td><b>Sábado</b></td><td>Dupla de sábado</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
       <tr><td><b>Backups</b></td><td>Seg a sex</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
-      <tr><td><b>Gerentes</b></td><td>Seg a sex</td><td class="num">08:00</td><td class="num">12:00–13:30</td><td class="num">17:54</td><td class="num">8h24</td></tr>
-      <tr><td><b>Coordenadores e assistentes</b></td><td>Conforme escala</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -245,14 +243,7 @@ footer{color:var(--muted);font-size:14px}
 </section>
 
 <section>
-  <div class="eyebrow">6 · Gestão</div>
-  <h2>Gerentes, coordenadores e assistentes</h2>
-  <div class="scroll"><table class="grid" id="mgmt"></table></div>
-  <p>O coordenador de São João acompanha Barbacena remotamente na quarta (folga do coordenador de Barbacena) e nos sábados em que o assistente de Barbacena está de plantão. Gerentes e coordenadores fazem o sobreaviso de gestão em fins de semana alternados.</p>
-</section>
-
-<section>
-  <div class="eyebrow">7 · Sobreaviso</div>
+  <div class="eyebrow">6 · Sobreaviso</div>
   <h2>Quanto pagar em cada situação</h2>
   <div class="scroll"><table>
     <thead><tr><th>Situação</th><th>O que pagar</th></tr></thead>
@@ -268,7 +259,7 @@ footer{color:var(--muted);font-size:14px}
 </section>
 
 <section>
-  <div class="eyebrow">8 · Regras</div>
+  <div class="eyebrow">7 · Regras</div>
   <h2>O que foi cumprido</h2>
   <div class="scroll"><table>
     <thead><tr><th>Regra</th><th>Situação</th><th>Por quê</th></tr></thead>
@@ -473,17 +464,6 @@ footer{color:var(--muted);font-size:14px}
     document.getElementById('rot').innerHTML=h+'</tbody>';
   }
 
-  // ---------- management ----------
-  var mg=[
-    ['Gerentes',['t','t','t','t','t','f','f']],
-    ['Coordenador São João · semana de sábado',['t','t','t','f','t','t','f']],
-    ['Coordenador São João · semana normal',['t','t','t','t','t','f','f']],
-    ['Coordenador ou assistente Barbacena · semana de sábado',['t','t','f','t','t','t','f']],
-    ['Coordenador ou assistente Barbacena · semana normal',['t','t','t','t','t','f','f']]
-  ];
-  var mh='<thead><tr><th>Função</th>'+DN.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
-  mg.forEach(function(r){mh+='<tr><td>'+r[0]+'</td>'+r[1].map(function(c){return '<td>'+cell(c)+'</td>'}).join('')+'</tr>'});
-  document.getElementById('mgmt').innerHTML=mh+'</tbody>';
 
   function renderAll(){renderCal();renderRot()}
   renderBases();renderCov();renderAll();
