@@ -222,7 +222,7 @@ footer{color:var(--muted);font-size:14px}
     <span><i style="background:var(--off)"></i>Folga</span>
     <span><i style="background:var(--standby)"></i>Sobreaviso (fora do expediente)</span>
   </div>
-  <p class="cal-note">No celular: T = trabalha, F = folga, SA = sobreaviso.</p>
+  <p class="cal-note">Aqui ficam só os técnicos. A escala de gerentes, coordenadores e auxiliares está no item 6. No celular: T = trabalha, F = folga, SA = sobreaviso.</p>
   <div class="bases" id="bases"></div>
 </section>
 
@@ -555,7 +555,6 @@ footer{color:var(--muted);font-size:14px}
       if(b.n>2){rows.push(['Dupla do próximo sábado (sobreaviso na '+DFULL[b.folga].toLowerCase()+')',nx]);rows.push([(b.n-2)+' duplas de seg a sex',['t','t','t','t','t','f','f']])}
       else rows.push(['Outra dupla (pega o próximo sábado; sobreaviso na '+DFULL[b.folga].toLowerCase()+')',nx]);
       if(b.backups)rows.push([b.backups>1?b.backups+' backups':'Backup',['t','t','t','t','t','f','f']]);
-      var G=MG[b.id];if(G)G.forEach(function(r){if(b.id==='bca'&&/semana 2/.test(r[0]))return;rows.push(['Gestão · '+r[0],r[1]])});
       h+='<div style="display:grid;gap:10px"><div class="base-head"><h3>'+b.name+'</h3><span>'+b.n+' duplas'+(b.backups?' · '+b.backups+' backup'+(b.backups>1?'s':''):'')+'</span></div><div class="scroll"><table class="grid"><thead><tr><th>Equipe</th>'+DN.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
       rows.forEach(function(r){h+='<tr><td>'+lab(r[0])+'</td>'+r[1].map(function(c){return '<td>'+cell(c)+'</td>'}).join('')+'</tr>'});
       h+='</tbody></table></div></div>';
