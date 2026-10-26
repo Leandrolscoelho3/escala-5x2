@@ -117,6 +117,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--today);outline-
 #tip .k{color:var(--tip-muted)}
 #tip .sbl{color:var(--standby);font-weight:700}
 #tip .warn{color:var(--standby)}
+#tip .hl{border:1px solid var(--standby);border-radius:6px;padding:6px 8px;display:grid;gap:2px}
+#tip .hl b{color:var(--standby);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 #tip ul{margin:0;padding-left:16px}
 .names{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
 .names fieldset{border:1px solid var(--line);border-radius:8px;padding:10px 12px 12px;margin:0;display:grid;gap:8px;min-width:0}
@@ -335,21 +337,24 @@ footer{color:var(--muted);font-size:14px}
   }
   var H07='07:00–16:54 · almoço 11:30–13:00',H08='08:00–17:54 · almoço 12:00–13:30';
   function gest(b,d){
-    var dow=d.getDay(),even=mod(weekIdx(d),2)===0,wk=dow>=1&&dow<=5,staff=[],folga=[],sb;
+    var dow=d.getDay(),even=mod(weekIdx(d),2)===0,wk=dow>=1&&dow<=5,staff=[],folga=[],sb,hl=null;
     if(b.id==='sd')return null;
     if(wk)staff.push(['Gerente',H08]);else folga.push('Gerente');
     var team=b.id==='bca'?[['Coordenador',3]]:[['Coordenador',4],['Auxiliar',5]];
     team.forEach(function(t){if(dow===0||dow===t[1])folga.push(t[0]);else staff.push([t[0],H07])});
     if(b.id==='bca'){
       if(wk)sb=dow===3?'Gerente de Barbacena (cobrindo a folga do coordenador)':'Coordenador de Barbacena';
-      else sb=even?'Coordenador de Barbacena':'Auxiliar de São João (cobrindo Barbacena no fim de semana)';
+      else sb=even?'Coordenador de Barbacena':'Auxiliar de São João';
+      if(!even){var quem=(even?'Coordenador':'Auxiliar')+' de São João';
+        hl=wk?['Fim de semana coberto por São João','Neste sábado e domingo, o coordenador de Barbacena não fica de sobreaviso. Quem cobre Barbacena é o '+quem+'.']
+             :['Coberto por São João','Hoje o sobreaviso da gestão de Barbacena está com o '+quem+'.'];}
     }else{
       sb=even?'Coordenador de São João':'Auxiliar de São João';
       if(even&&dow===4)sb='Auxiliar de São João (cobrindo a folga do coordenador)';
       else if(!even&&dow===5)sb='Coordenador de São João (cobrindo a folga do auxiliar)';
       else if(!wk&&!even)sb+=' (também cobre Barbacena no fim de semana)';
     }
-    return {staff:staff,folga:folga,sb:sb,sun:dow===0};
+    return {staff:staff,folga:folga,sb:sb,sun:dow===0,hl:hl};
   }
   function shift(i,dow){
     if(dow===6)return '07:00–16:54 · almoço 11:30–13:00';
@@ -386,6 +391,7 @@ footer{color:var(--muted);font-size:14px}
       var tag='';
       if(dow===0)tag='<span class="tag sbt">Só sobreaviso</span>';
       else if(dow===6)tag='<span class="tag">Sábado</span>';
+      if((dow===6||dow===0)&&mod(weekIdx(d),2)===1&&(filter==='all'||filter==='bca'))tag+='<span class="tag sbt">Gestão BCA: SJ</span>';
       else if(tags.length)tag='<span class="tag">'+tags.join(' · ')+'</span>';
       var iso=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
       h+='<button type="button" class="'+cls+'" data-d="'+iso+'" aria-expanded="false" aria-label="'+DFULL[dow]+', '+d.getDate()+' de '+MONTHS[d.getMonth()]+'">'+
@@ -414,6 +420,7 @@ footer{color:var(--muted);font-size:14px}
         s+=g.staff.length?'<div class="k">Gestão no expediente</div><ul>'+g.staff.map(function(x){return '<li>'+x[0]+' <span class="k">'+x[1]+'</span></li>'}).join('')+'</ul>':'<div class="k">Gestão de folga</div>';
         if(g.folga.length&&g.staff.length)s+='<div class="k">Gestão de folga: '+g.folga.join(', ')+'</div>';
         s+='<div><span class="sbl">Sobreaviso da gestão:</span> '+g.sb+'</div>';
+        if(g.hl)s+='<div class="hl"><b>'+g.hl[0]+'</b><span>'+g.hl[1]+'</span></div>';
         if(g.sun)s+='<div class="warn">Domingo é folga da gestão: chamado hoje sai em dobro ou gera outra folga.</div>';
       }
       s+='</div>';
