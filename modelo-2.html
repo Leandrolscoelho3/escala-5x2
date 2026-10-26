@@ -354,11 +354,11 @@ footer{color:var(--muted);font-size:14px}
     <thead><tr><th>Meta</th><th>Por quê</th><th>Resultado esperado</th><th>Situação</th></tr></thead>
     <tbody>
       <tr><td><b>Contratar 1 auxiliar para Barbacena</b></td><td>Hoje o coordenador de Barbacena não tem par na coordenação. O gerente cobre os dias úteis da semana sem o coordenador e as quartas, e no fim de semana alternado o coordenador de São João precisa cobrir as duas bases.</td><td>Barbacena passa a ter o mesmo modelo de São João: coordenador e auxiliar revezando o sobreaviso de segunda a domingo e cobrindo um ao outro na folga, com o auxiliar dando suporte ao coordenador. O gerente de Barbacena sai do sobreaviso, e o coordenador de São João volta a cuidar só de São João.</td><td class="status warn">Em aberto</td></tr>
-      <tr><td><b>Dupla do próximo sábado de sobreaviso também no sábado e no domingo</b></td><td>Sábado e domingo são os dias com menos equipes na rua (1 dupla no sábado, nenhuma no domingo) e os dias em que mais precisamos cumprir o SLA. Hoje essa dupla fica de sobreaviso só no dia da folga do meio da semana da dupla de sábado.</td><td>Uma segunda equipe formalmente de sobreaviso no fim de semana, pronta para ser acionada quando a dupla de sábado não der conta, com custo previsível e segurança jurídica para acionar.</td><td class="status warn">Em aberto</td></tr>
+      <tr><td><b>Dupla do próximo sábado de sobreaviso também no sábado e no domingo</b><span class="sub">Só técnicos · Barbacena e São João</span></td><td>Sábado e domingo são os dias com menos equipes na rua (1 dupla no sábado, nenhuma no domingo) e os dias em que mais precisamos cumprir o SLA. Hoje essa dupla fica de sobreaviso só no dia da folga do meio da semana da dupla de sábado. Vale só para os técnicos de Barbacena e São João; Santos Dumont, gerentes e coordenadores não entram.</td><td>Uma segunda equipe formalmente de sobreaviso no fim de semana, pronta para ser acionada quando a dupla de sábado não der conta, com custo previsível e segurança jurídica para acionar.</td><td class="status warn">Em aberto</td></tr>
     </tbody>
   </table></div>
   <h3>Como ficaria a dupla do próximo sábado</h3>
-  <p>Exemplo de Barbacena. O mesmo vale para São João (folga na quarta) e Santos Dumont (folga na quinta). Em destaque, os dois dias de sobreaviso que entram com a meta.</p>
+  <p>Exemplo de Barbacena. O mesmo vale para São João, onde a folga da dupla de sábado é na quarta. Santos Dumont fica como está. Em destaque, os dois dias de sobreaviso que entram com a meta.</p>
   <div class="scroll"><table class="grid meta2">
     <thead><tr><th>Equipe</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th><th>Dom</th></tr></thead>
     <tbody>
@@ -376,7 +376,7 @@ footer{color:var(--muted);font-size:14px}
   </ul>
 
   <h3>Custo dos 2 dias a mais de sobreaviso</h3>
-  <p>Premissas: salários brutos de referência, valor da hora = salário ÷ 210 (jornada de 42h), sobreaviso = 1/3 da hora, 48h por fim de semana (sábado e domingo inteiros) e 4,33 semanas por mês. Em cada base, uma dupla fica nessa posição por semana.</p>
+  <p>Premissas: salários brutos de referência, valor da hora = salário ÷ 210 (jornada de 42h), sobreaviso = 1/3 da hora, 48h por fim de semana (sábado e domingo inteiros) e 4,33 semanas por mês. Em Barbacena e em São João, uma dupla fica nessa posição por semana. Santos Dumont, gerentes e coordenadores não entram na conta.</p>
   <div class="scroll"><table>
     <thead><tr><th>Cargo</th><th>Salário bruto</th><th>Valor da hora</th><th>Sobreaviso por hora</th><th>Por fim de semana (48h)</th><th>Hora de chamado no fim de semana (100%)</th></tr></thead>
     <tbody>
@@ -386,14 +386,14 @@ footer{color:var(--muted);font-size:14px}
     </tbody>
   </table></div>
   <div class="scroll"><table>
-    <thead><tr><th>Composição da dupla</th><th>Por fim de semana</th><th>Por mês, 1 base</th><th>Por mês, 3 bases</th><th>Por ano, 3 bases</th></tr></thead>
+    <thead><tr><th>Composição da dupla</th><th>Por fim de semana</th><th>Por mês, 1 base</th><th>Por mês, 2 bases</th><th>Por ano, 2 bases</th></tr></thead>
     <tbody>
-      <tr><td>Auxiliar + nível 1</td><td class="num">R$ 502,86</td><td class="num">R$ 2.179,05</td><td class="num">R$ 6.537,14</td><td class="num">R$ 78.445,71</td></tr>
-      <tr><td>Auxiliar + nível 2</td><td class="num">R$ 533,33</td><td class="num">R$ 2.311,11</td><td class="num"><b>R$ 6.933,33</b></td><td class="num">R$ 83.200,00</td></tr>
-      <tr><td>Nível 1 + nível 2</td><td class="num">R$ 609,52</td><td class="num">R$ 2.641,27</td><td class="num"><b>R$ 7.923,81</b></td><td class="num">R$ 95.085,71</td></tr>
+      <tr><td>Auxiliar + nível 1</td><td class="num">R$ 502,86</td><td class="num">R$ 2.179,05</td><td class="num">R$ 4.358,10</td><td class="num">R$ 52.297,14</td></tr>
+      <tr><td>Auxiliar + nível 2</td><td class="num">R$ 533,33</td><td class="num">R$ 2.311,11</td><td class="num"><b>R$ 4.622,22</b></td><td class="num">R$ 55.466,67</td></tr>
+      <tr><td>Nível 1 + nível 2</td><td class="num">R$ 609,52</td><td class="num">R$ 2.641,27</td><td class="num"><b>R$ 5.282,54</b></td><td class="num">R$ 63.390,48</td></tr>
     </tbody>
   </table></div>
-  <p class="note">Faixa estimada: entre R$ 6.500 e R$ 7.900 por mês para as 3 bases, só de sobreaviso, conforme a composição das duplas. Os valores são brutos, sem encargos e reflexos (DSR, férias, 13º, FGTS, INSS), que aumentam o custo real. Quando a equipe for acionada, as horas trabalhadas no sábado e no domingo são pagas à parte, em dobro, ou compensadas com folga. Atenção: com a meta, essa dupla emenda o sobreaviso do fim de semana com a semana de sábado dela, ficando de sobreaviso de sábado até o domingo seguinte, menos na folga. Vale avaliar o descanso e organizar em escalas de no máximo 24h.</p>
+  <p class="note">Faixa estimada: entre R$ 4.360 e R$ 5.280 por mês para Barbacena e São João, só de sobreaviso dos técnicos, conforme a composição das duplas. Os valores são brutos, sem encargos e reflexos (DSR, férias, 13º, FGTS, INSS), que aumentam o custo real. Quando a equipe for acionada, as horas trabalhadas no sábado e no domingo são pagas à parte, em dobro, ou compensadas com folga. Atenção: com a meta, essa dupla emenda o sobreaviso do fim de semana com a semana de sábado dela, ficando de sobreaviso de sábado até o domingo seguinte, menos na folga. Vale avaliar o descanso e organizar em escalas de no máximo 24h.</p>
 </section>
 
 <footer>Proposta para discussão interna. Antes de implantar, validar com o contador ou advogado trabalhista, principalmente o acordo coletivo para as 8h24, a organização do sobreaviso e os percentuais da convenção. Base legal: Emenda Constitucional 141/2026 e CLT art. 244.</footer>
