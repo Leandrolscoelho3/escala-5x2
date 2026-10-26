@@ -180,7 +180,7 @@ footer{color:var(--muted);font-size:14px}
       <tr><td><b>Sábado</b></td><td>Dupla de sábado</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
       <tr><td><b>Backups</b></td><td>Seg a sex</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
       <tr><td><b>Gerentes</b></td><td>Seg a sex</td><td class="num">08:00</td><td class="num">12:00–13:30</td><td class="num">17:54</td><td class="num">8h24</td></tr>
-      <tr><td><b>Coordenadores e auxiliares</b></td><td>Seg a sex</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
+      <tr><td><b>Coordenadores e auxiliares</b></td><td>Seg a sáb · folga domingo + quarta (BCA) ou quinta (SJ)</td><td class="num">07:00</td><td class="num">11:30–13:00</td><td class="num">16:54</td><td class="num">8h24</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -248,7 +248,7 @@ footer{color:var(--muted);font-size:14px}
   <div class="eyebrow">6 · Gestão</div>
   <h2>Gerentes, coordenadores e auxiliares</h2>
   <div class="scroll"><table class="grid" id="mgmt"></table></div>
-  <p>Os gerentes trabalham de segunda a sexta e não entram no sobreaviso. Em São João, o coordenador e o auxiliar revezam o sobreaviso, uma semana cada, de segunda a domingo. Em Barbacena, o coordenador tem uma semana de sobreaviso e uma semana sem. Na semana sem, quem cobre Barbacena é o auxiliar de São João, que nessa semana fica de sobreaviso nas duas bases. A semana 1 começa em 14/12/2026, e as semanas 1 e 2 se alternam daí em diante.</p>
+  <p>Os gerentes trabalham de segunda a sexta e não entram no sobreaviso. Coordenadores e auxiliares trabalham de segunda a sábado e folgam no domingo e em um dia da semana: quarta em Barbacena e quinta em São João. Em São João, o coordenador e o auxiliar revezam o sobreaviso, uma semana cada, de segunda a domingo. Em Barbacena, o coordenador tem uma semana de sobreaviso e uma sem; na semana sem, o auxiliar de São João cobre Barbacena. Nos dias de folga do meio da semana, uma base cobre a outra: na quarta, o auxiliar de São João assume o sobreaviso de Barbacena, e na quinta, o coordenador de Barbacena assume o de São João. A semana 1 começa em 14/12/2026, e as semanas 1 e 2 se alternam daí em diante.</p>
 </section>
 
 <section>
@@ -281,6 +281,8 @@ footer{color:var(--muted);font-size:14px}
       <tr><td>Santos Dumont</td><td class="status warn">Atenção</td><td>Com 2 duplas, cada uma pega sábado e sobreaviso a cada 2 semanas, e na quinta a base fica com 1 dupla.</td></tr>
       <tr><td>Gerentes só de segunda a sexta</td><td class="status ok">Cumprida</td><td>Gerentes de Barbacena e São João não entram no sobreaviso.</td></tr>
       <tr><td>Coordenador e auxiliar de São João revezam o sobreaviso</td><td class="status ok">Cumprida</td><td>Uma semana cada um, de segunda a domingo.</td></tr>
+      <tr><td>Coordenadores e auxiliares com folga no domingo e um dia na semana</td><td class="status ok">Cumprida</td><td>Barbacena folga na quarta e São João na quinta. Nesses dias, a outra base assume o sobreaviso da gestão.</td></tr>
+      <tr><td>Gestão presente nos dias de folga do meio da semana</td><td class="status warn">Atenção</td><td>Na quarta, Barbacena fica só com o gerente. Na quinta, São João fica só com o gerente, porque coordenador e auxiliar folgam no mesmo dia.</td></tr>
       <tr><td>Coordenador de Barbacena com uma semana de sobreaviso e uma sem</td><td class="status warn">Atenção</td><td>Na semana sem sobreaviso dele, o auxiliar de São João cobre Barbacena e fica de sobreaviso nas duas bases. Ver a meta do item 9.</td></tr>
       <tr><td>Colocar as 2h semanais no banco de horas</td><td class="status bad">Não recomendada</td><td>Banco de horas é para hora trabalhada a mais. A saída é trabalhar 8h24 por dia (precisa de acordo com o sindicato) ou 8h por dia (40h).</td></tr>
     </tbody>
@@ -333,10 +335,20 @@ footer{color:var(--muted);font-size:14px}
   }
   var H07='07:00–16:54 · almoço 11:30–13:00',H08='08:00–17:54 · almoço 12:00–13:30';
   function gest(b,d){
-    var dow=d.getDay(),even=mod(weekIdx(d),2)===0,wd=dow>=1&&dow<=5;
-    if(b.id==='bca')return {staff:wd?[['Gerente',H08],['Coordenador',H07]]:[],sb:even?'Coordenador de Barbacena':'Auxiliar de São João (cobrindo Barbacena)'};
-    if(b.id==='sj')return {staff:wd?[['Gerente',H08],['Coordenador',H07],['Auxiliar',H07]]:[],sb:even?'Coordenador de São João':'Auxiliar de São João'};
-    return null;
+    var dow=d.getDay(),even=mod(weekIdx(d),2)===0,staff=[],folga=[],sb,cover='';
+    if(b.id==='sd')return null;
+    if(dow>=1&&dow<=5)staff.push(['Gerente',H08]);else folga.push('Gerente');
+    var team=b.id==='bca'?[['Coordenador',3]]:[['Coordenador',4],['Auxiliar',4]];
+    team.forEach(function(t){if(dow===0||dow===t[1])folga.push(t[0]);else staff.push([t[0],H07])});
+    if(b.id==='bca'){
+      sb=even?'Coordenador de Barbacena':'Auxiliar de São João (cobrindo Barbacena)';
+      if(even&&dow===3){sb='Auxiliar de São João';cover=' (cobrindo a folga do coordenador de Barbacena)'}
+      if(!even&&dow===4){sb='Coordenador de Barbacena';cover=' (cobrindo a folga do auxiliar de São João)'}
+    }else{
+      sb=even?'Coordenador de São João':'Auxiliar de São João';
+      if(dow===4){sb='Coordenador de Barbacena';cover=' (cobrindo a folga do coordenador e do auxiliar de São João)'}
+    }
+    return {staff:staff,folga:folga,sb:sb+cover,sun:dow===0};
   }
   function shift(i,dow){
     if(dow===6)return '07:00–16:54 · almoço 11:30–13:00';
@@ -399,7 +411,9 @@ footer{color:var(--muted);font-size:14px}
       var g=gest(b,d);
       if(g){
         s+=g.staff.length?'<div class="k">Gestão no expediente</div><ul>'+g.staff.map(function(x){return '<li>'+x[0]+' <span class="k">'+x[1]+'</span></li>'}).join('')+'</ul>':'<div class="k">Gestão de folga</div>';
+        if(g.folga.length&&g.staff.length)s+='<div class="k">Gestão de folga: '+g.folga.join(', ')+'</div>';
         s+='<div><span class="sbl">Sobreaviso da gestão:</span> '+g.sb+'</div>';
+        if(g.sun)s+='<div class="warn">Domingo é folga da gestão: chamado hoje sai em dobro ou gera outra folga.</div>';
       }
       s+='</div>';
     });
@@ -462,6 +476,20 @@ footer{color:var(--muted);font-size:14px}
 
   // ---------- week-type ----------
   function cell(c){var off=c[0]==='f',sb=c.indexOf('s')>0;return '<div class="cell '+(off?'f':'t')+'">'+(off?'Folga':'Trabalha')+(sb?'<span class="sb">sobreaviso</span>':'')+'</div>'}
+  var MG={
+    bca:[
+      ['Gerente',['t','t','t','t','t','f','f']],
+      ['Coordenador · semana 1 (sobreaviso; na quarta, folga, cobre o auxiliar de SJ)',['ts','ts','f','ts','ts','ts','fs']],
+      ['Coordenador · semana 2 (sobreaviso só na quinta, cobrindo SJ)',['t','t','f','ts','t','t','f']]
+    ],
+    sj:[
+      ['Gerente',['t','t','t','t','t','f','f']],
+      ['Coordenador · semana 1 (sobreaviso; na quinta, folga, cobre o coordenador de BCA)',['ts','ts','ts','f','ts','ts','fs']],
+      ['Coordenador · semana 2 (sem sobreaviso)',['t','t','t','f','t','t','f']],
+      ['Auxiliar · semana 1 (sobreaviso só na quarta, cobrindo BCA)',['t','t','ts','f','t','t','f']],
+      ['Auxiliar · semana 2 (sobreaviso em SJ e BCA; na quinta, cobre o coordenador de BCA)',['ts','ts','ts','f','ts','ts','fs']]
+    ]
+  };
   function renderBases(){
     var h='';
     BASES.forEach(function(b){
@@ -470,9 +498,7 @@ footer{color:var(--muted);font-size:14px}
       if(b.n>2){rows.push(['Dupla do próximo sábado (sobreaviso na '+DFULL[b.folga].toLowerCase()+')',nx]);rows.push([(b.n-2)+' duplas de seg a sex',['t','t','t','t','t','f','f']])}
       else rows.push(['Outra dupla (pega o próximo sábado; sobreaviso na '+DFULL[b.folga].toLowerCase()+')',nx]);
       if(b.backups)rows.push([b.backups>1?'Backups ('+b.backups+')':'Backup',['t','t','t','t','t','f','f']]);
-      var W=['t','t','t','t','t','f','f'],S=['ts','ts','ts','ts','ts','fs','fs'];
-      if(b.id==='bca'){rows.push(['Gestão · Gerente',W],['Gestão · Coordenador, semana de sobreaviso',S],['Gestão · Coordenador, semana sem sobreaviso (cobre o auxiliar de SJ)',W])}
-      if(b.id==='sj'){rows.push(['Gestão · Gerente',W],['Gestão · Coordenador ou auxiliar, semana de sobreaviso',S],['Gestão · Coordenador ou auxiliar, semana sem sobreaviso',W])}
+      var G=MG[b.id];if(G)G.forEach(function(r){rows.push(['Gestão · '+r[0],r[1]])});
       h+='<div style="display:grid;gap:10px"><div class="base-head"><h3>'+b.name+'</h3><span>'+b.n+' duplas'+(b.backups?' · '+b.backups+' backup'+(b.backups>1?'s':''):'')+'</span></div><div class="scroll"><table class="grid"><thead><tr><th>Equipe</th>'+DN.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
       rows.forEach(function(r){h+='<tr><td>'+r[0]+'</td>'+r[1].map(function(c){return '<td>'+cell(c)+'</td>'}).join('')+'</tr>'});
       h+='</tbody></table></div></div>';
@@ -500,7 +526,7 @@ footer{color:var(--muted);font-size:14px}
       var mon=new Date(2026,11,14+w*7),sat=new Date(2026,11,19+w*7),sun=new Date(2026,11,20+w*7);
       h+='<tr><td class="num">'+fmt(mon)+' a '+fmt(sun)+'</td><td class="num">'+fmt(sat)+'</td>'+
         BASES.map(function(b){return '<td>'+esc(nm(b,mod(w,b.n)))+'<br><span class="row-l">sobreaviso seg–dom · na '+DFULL[b.folga].toLowerCase()+' (folga): '+esc(nm(b,mod(w+1,b.n)))+'</span></td>'}).join('')+
-        '<td>'+(w%2===0?'Barbacena: Coordenador BCA<br>São João: Coordenador SJ':'Barbacena e São João: Auxiliar SJ')+'</td></tr>';
+        '<td>'+(w%2===0?'Barbacena: Coordenador BCA <span class="row-l">(qua: Auxiliar SJ)</span><br>São João: Coordenador SJ <span class="row-l">(qui: Coordenador BCA)</span>':'Barbacena e São João: Auxiliar SJ <span class="row-l">(qui: Coordenador BCA)</span>')+'</td></tr>';
     }
     document.getElementById('rot').innerHTML=h+'</tbody>';
   }
@@ -508,14 +534,9 @@ footer{color:var(--muted);font-size:14px}
   // ---------- management ----------
   var mg=[
     ['Gerente Barbacena',['t','t','t','t','t','f','f']],
-    ['Gerente São João',['t','t','t','t','t','f','f']],
-    ['Coordenador Barbacena · semana 1 (sobreaviso)',['ts','ts','ts','ts','ts','fs','fs']],
-    ['Coordenador Barbacena · semana 2 (sem sobreaviso)',['t','t','t','t','t','f','f']],
-    ['Coordenador São João · semana 1 (sobreaviso)',['ts','ts','ts','ts','ts','fs','fs']],
-    ['Coordenador São João · semana 2 (sem sobreaviso)',['t','t','t','t','t','f','f']],
-    ['Auxiliar São João · semana 1 (sem sobreaviso)',['t','t','t','t','t','f','f']],
-    ['Auxiliar São João · semana 2 (sobreaviso SJ + Barbacena)',['ts','ts','ts','ts','ts','fs','fs']]
-  ];
+    ['Gerente São João',['t','t','t','t','t','f','f']]
+  ].concat(MG.bca.slice(1).map(function(r){return [r[0].replace('Coordenador','Coordenador Barbacena'),r[1]]}))
+   .concat(MG.sj.slice(1).map(function(r){return [r[0].replace(/^(Coordenador|Auxiliar)/,'$1 São João'),r[1]]}));
   var mh='<thead><tr><th>Função</th>'+DN.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
   mg.forEach(function(r){mh+='<tr><td>'+r[0]+'</td>'+r[1].map(function(c){return '<td>'+cell(c)+'</td>'}).join('')+'</tr>'});
   document.getElementById('mgmt').innerHTML=mh+'</tbody>';
