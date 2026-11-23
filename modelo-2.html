@@ -90,6 +90,10 @@ section h3{margin-top:8px}
 .meta-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
 .meta-head h3{margin:0}
 tr.tot td{background:var(--work-soft)}
+.wkhead{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-top:4px}
+.wkhead h3{margin:0}
+.wkhead span{color:var(--muted);font-size:14px}
+.grid td.chg .cell{box-shadow:inset 0 0 0 2px var(--standby)}
 ul.plain{margin:0;padding-left:20px;display:grid;gap:6px;max-width:72ch}
 .grid th{text-align:center} .grid th:first-child{text-align:left}
 .bases{display:grid;gap:24px}
@@ -287,7 +291,11 @@ footer{color:var(--muted);font-size:14px}
 <section>
   <div class="eyebrow">6 · Gestão · gerentes, coordenadores e auxiliares</div>
   <h2>Gerentes, coordenadores e auxiliares</h2>
-  <div class="scroll"><table class="grid" id="mgmt"></table></div>
+  <p>As folgas da gestão mudam de uma semana para a outra. As duas semanas se alternam. Os dias com contorno laranja são os que mudam entre a semana 1 e a semana 2.</p>
+  <div class="wkhead"><h3>Semana 1</h3><span>começa em 14/12, depois 28/12, 11/01…</span></div>
+  <div class="scroll"><table class="grid" id="mgmt1"></table></div>
+  <div class="wkhead"><h3>Semana 2</h3><span>começa em 21/12, depois 04/01, 18/01…</span></div>
+  <div class="scroll"><table class="grid" id="mgmt2"></table></div>
   <h3>Quem fica de sobreaviso na gestão</h3>
   <div class="legend">
     <span><i style="background:var(--work-soft)"></i>Coordenador</span>
@@ -693,9 +701,11 @@ footer{color:var(--muted);font-size:14px}
   // ---------- management ----------
   var mg=MG.bca.map(function(r){return [r[0].replace(/^(Gerente|Coordenador)/,'$1 Barbacena'),r[1]]})
    .concat(MG.sj.map(function(r){return [r[0].replace(/^(Gerente|Coordenador|Auxiliar)/,'$1 São João'),r[1]]}));
-  var mh='<thead><tr><th>Função</th>'+DN.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
-  mg.forEach(function(r){mh+='<tr><td>'+lab(r[0])+'</td>'+r[1].map(function(c){return '<td>'+cell(c)+'</td>'}).join('')+'</tr>'});
-  document.getElementById('mgmt').innerHTML=mh+'</tbody>';
+  [1,2].forEach(function(n){
+    var mh='<thead><tr><th>Função</th>'+DN.map(function(d){return '<th>'+d+'</th>'}).join('')+'</tr></thead><tbody>';
+    mg.forEach(function(r){mh+='<tr><td>'+r[0].replace(/ \(.*\)$/,'')+'</td>'+r[1].map(function(c){var chg=(c==='1f'||c==='2f');var v=chg?(c[0]==String(n)?'f':'t'):c;return '<td'+(chg?' class="chg"':'')+'>'+cell(v)+'</td>'}).join('')+'</tr>'});
+    document.getElementById('mgmt'+n).innerHTML=mh+'</tbody>';
+  });
 
   function renderAll(){renderCal();renderRot()}
   renderBases();renderCov();renderAll();
